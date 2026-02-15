@@ -13,7 +13,7 @@ class WebRequestHandler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-Type", "text/html")
         self.end_headers()
-        self.wfile.write(self.get_response().encode("utf-8"))
+        self.wfile.write(self.get_html_dinamico().encode("utf-8"))
 
     def get_response(self):
         return f"""
@@ -22,8 +22,12 @@ class WebRequestHandler(BaseHTTPRequestHandler):
     <p> Path Original: {self.path}         </p>
     <p> Headers: {self.headers}      </p>
     <p> Query: {self.query_data()}   </p>
-"""
-
+    """
+        
+    def get_html_dinamico(self):
+        return f"""
+        <h1> Proyecto: {self.url().path} Autor: {self.query_data()['autor']}  </h1>
+        """
 
 if __name__ == "__main__":
     print("Starting server")
