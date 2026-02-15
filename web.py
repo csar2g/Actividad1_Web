@@ -10,10 +10,22 @@ class WebRequestHandler(BaseHTTPRequestHandler):
         return dict(parse_qsl(self.url().query))
 
     def do_GET(self):
-        self.send_response(200)
-        self.send_header("Content-Type", "text/html")
-        self.end_headers()
-        self.wfile.write(self.get_html_dinamico().encode("utf-8"))
+        if self.path == '/' or self.path == '/home.html':
+            self.path = '/home.html'
+            file = open(self.path[1:])
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+            self.wfile.write(file.read().encode('utf-8'))        
+
+        elif 'autor' in self.query_data():
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html")
+            self.end_headers()
+            self.wfile.write(self.get_html_dinamico().encode("utf-8"))
+
+        else:
+            self.send_error(404, "Error 404")
 
     def get_response(self):
         return f"""
